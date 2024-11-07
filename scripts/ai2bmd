@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Standalone launcher script to setup mounts and GPUs accordingly, and 
-# pass through arguments into a docker image.
+# pass through arguments into a udocker image.
 # Mirrors some arguments from the argument parser at src/AIMD/arguments.py
 import argparse
 import os
@@ -8,13 +8,13 @@ import subprocess
 import sys
 from os import path as osp
 
-_docker_image = "ghcr.io/microsoft/ai2bmd:latest"
-_docker_image_data1 = "ghcr.io/microsoft/ai2bmd:training-data1"
-_docker_image_data2 = "ghcr.io/microsoft/ai2bmd:training-data2"
-_docker_image_data3 = "ghcr.io/microsoft/ai2bmd:training-data3"
-_docker_image_data4 = "ghcr.io/microsoft/ai2bmd:training-data4"
-_docker_image_data5 = "ghcr.io/microsoft/ai2bmd:training-data5"
-_docker_image_data6 = "ghcr.io/microsoft/ai2bmd:training-data6"
+_udocker_image = "ghcr.io/microsoft/ai2bmd:latest"
+_udocker_image_data1 = "ghcr.io/microsoft/ai2bmd:training-data1"
+_udocker_image_data2 = "ghcr.io/microsoft/ai2bmd:training-data2"
+_udocker_image_data3 = "ghcr.io/microsoft/ai2bmd:training-data3"
+_udocker_image_data4 = "ghcr.io/microsoft/ai2bmd:training-data4"
+_udocker_image_data5 = "ghcr.io/microsoft/ai2bmd:training-data5"
+_udocker_image_data6 = "ghcr.io/microsoft/ai2bmd:training-data6"
 _src_dir = "/ai2bmd"
 
 def parse_args(argv):
@@ -259,7 +259,7 @@ def remove_argv(argv, key, n):
 
 def check_env(cmd, message, do_exit=True):
     try:
-        # Check if Docker service is running by listing Docker containers
+        # Check if udocker service is running by listing udocker containers
         result = subprocess.run(cmd, capture_output=True, text=True)
         if result.returncode == 0:
             return True
@@ -289,41 +289,41 @@ def main() -> None:
     if "--download-training-data" in argv:
         container_name = "ai2bmd_training_data_copy_container"
         run('>>> Downloading AI2BMD training data...',
-            f"docker pull {_docker_image_data1} && "
-            f"docker pull {_docker_image_data2} && "
-            f"docker pull {_docker_image_data3} && "
-            f"docker pull {_docker_image_data4} && "
-            f"docker pull {_docker_image_data5} && "
-            f"docker pull {_docker_image_data6}"
+            f"udocker pull {_udocker_image_data1} && "
+            f"udocker pull {_udocker_image_data2} && "
+            f"udocker pull {_udocker_image_data3} && "
+            f"udocker pull {_udocker_image_data4} && "
+            f"udocker pull {_udocker_image_data5} && "
+            f"udocker pull {_udocker_image_data6}"
             )
         run('>>> Unpacking data...',
-            f"docker container rm {container_name} 1> /dev/null 2> /dev/null || true && "
-            f"docker create --name {container_name} {_docker_image_data1} bash && "
-            f"docker cp {container_name}:/ai2bmd-training-part-1.tar.xz - | tar x -O | tar xJv &&"
-            f"docker container rm {container_name} 1> /dev/null 2> /dev/null || true && "
-            f"docker create --name {container_name} {_docker_image_data2} bash && "
-            f"docker cp {container_name}:/ai2bmd-training-part-2.tar.xz - | tar x -O | tar xJv &&"
-            f"docker container rm {container_name} 1> /dev/null 2> /dev/null || true && "
-            f"docker create --name {container_name} {_docker_image_data3} bash && "
-            f"docker cp {container_name}:/ai2bmd-training-part-3.tar.xz - | tar x -O | tar xJv &&"
-            f"docker container rm {container_name} 1> /dev/null 2> /dev/null || true && "
-            f"docker create --name {container_name} {_docker_image_data4} bash && "
-            f"docker cp {container_name}:/ai2bmd-training-part-4.tar.xz - | tar x -O | tar xJv &&"
-            f"docker container rm {container_name} 1> /dev/null 2> /dev/null || true && "
-            f"docker create --name {container_name} {_docker_image_data5} bash && "
-            f"docker cp {container_name}:/ai2bmd-training-part-5.tar.xz - | tar x -O | tar xJv &&"
-            f"docker container rm {container_name} 1> /dev/null 2> /dev/null || true && "
-            f"docker create --name {container_name} {_docker_image_data6} bash && "
-            f"docker cp {container_name}:/ai2bmd-training-part-6.tar.xz - | tar x -O | tar xJv"
+            f"udocker container rm {container_name} 1> /dev/null 2> /dev/null || true && "
+            f"udocker create --name {container_name} {_udocker_image_data1} bash && "
+            f"udocker cp {container_name}:/ai2bmd-training-part-1.tar.xz - | tar x -O | tar xJv &&"
+            f"udocker container rm {container_name} 1> /dev/null 2> /dev/null || true && "
+            f"udocker create --name {container_name} {_udocker_image_data2} bash && "
+            f"udocker cp {container_name}:/ai2bmd-training-part-2.tar.xz - | tar x -O | tar xJv &&"
+            f"udocker container rm {container_name} 1> /dev/null 2> /dev/null || true && "
+            f"udocker create --name {container_name} {_udocker_image_data3} bash && "
+            f"udocker cp {container_name}:/ai2bmd-training-part-3.tar.xz - | tar x -O | tar xJv &&"
+            f"udocker container rm {container_name} 1> /dev/null 2> /dev/null || true && "
+            f"udocker create --name {container_name} {_udocker_image_data4} bash && "
+            f"udocker cp {container_name}:/ai2bmd-training-part-4.tar.xz - | tar x -O | tar xJv &&"
+            f"udocker container rm {container_name} 1> /dev/null 2> /dev/null || true && "
+            f"udocker create --name {container_name} {_udocker_image_data5} bash && "
+            f"udocker cp {container_name}:/ai2bmd-training-part-5.tar.xz - | tar x -O | tar xJv &&"
+            f"udocker container rm {container_name} 1> /dev/null 2> /dev/null || true && "
+            f"udocker create --name {container_name} {_udocker_image_data6} bash && "
+            f"udocker cp {container_name}:/ai2bmd-training-part-6.tar.xz - | tar x -O | tar xJv"
             )
         run('>>> Cleaning up...',
-            f"docker container rm {container_name} && "
-            f"docker image rm {_docker_image_data1} && "
-            f"docker image rm {_docker_image_data2} && "
-            f"docker image rm {_docker_image_data3} && "
-            f"docker image rm {_docker_image_data4} && "
-            f"docker image rm {_docker_image_data5} && "
-            f"docker image rm {_docker_image_data6}"
+            f"udocker container rm {container_name} && "
+            f"udocker image rm {_udocker_image_data1} && "
+            f"udocker image rm {_udocker_image_data2} && "
+            f"udocker image rm {_udocker_image_data3} && "
+            f"udocker image rm {_udocker_image_data4} && "
+            f"udocker image rm {_udocker_image_data5} && "
+            f"udocker image rm {_udocker_image_data6}"
             )
         print('>>> Done.')
         exit(0)
@@ -331,9 +331,9 @@ def main() -> None:
     args = parse_args(argv)
 
     # 0. health check
-    check_env(['docker', 'ps'], 
-              "Docker is not installed or not running. \
-               Please see https://docs.docker.com/engine/install/ for installation instructions.")
+    check_env(['udocker', 'ps'], 
+              "udocker is not installed or not running. \
+               Please see https://docs.udocker.com/engine/install/ for installation instructions.")
     gpu_ok = check_env(['nvidia-smi'], 
                        "NVIDIA driver is not installed or not properly loaded. \
                         Please see https://docs.nvidia.com/cuda/cuda-installation-guide-linux/ for installation instructions. \
@@ -345,13 +345,13 @@ def main() -> None:
     # 1. check for update
     remove_argv(argv, "--software-update", 1)
     if args.software_update:
-        os.system(f"docker pull {_docker_image}")
+        os.system(f"udocker pull {_udocker_image}")
 
     # 2. get mount paths (all mapped to /mnt/abs-path...), rewrite argv
     # 2a. cwd
     cwd = osp.abspath(os.getcwd())
     mount_paths = [cwd]
-    docker_cwd = "/mnt" + cwd
+    udocker_cwd = "/mnt" + cwd
 
     # 2b. base dir
     base_dir = osp.abspath(args.base_dir)
@@ -406,8 +406,8 @@ def main() -> None:
         gpu_opts = []
 
     # 4. Launch the program
-    launch_cmd = f"docker run -w {docker_cwd} {cat(gpu_opts)} --rm {cat(mount_opts)} {_docker_image} python -u /ai2bmd/main.py {cat(argv)}"
-    print(f"Launching AI2BMD with Docker: {launch_cmd}")
+    launch_cmd = f"udocker run -w {udocker_cwd} {cat(gpu_opts)} --rm {cat(mount_opts)} {_udocker_image} python -u /ai2bmd/main.py {cat(argv)}"
+    print(f"Launching AI2BMD with udocker: {launch_cmd}")
     os.system(launch_cmd)
 
 
